@@ -5,6 +5,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,16 @@ import java.util.Random;
 public class BotController {
 
     private final Random random = new Random();
+
+    @Value("${app.token}")
+    private String token;
+
+    @Value("${app.vkApiMethod}")
+    private String vkApiMethod;
+
+    @Value("${app.code}")
+    private String code;
+
     URL url;
     HttpClient client;
     HttpGet httpGet;
@@ -32,9 +43,10 @@ public class BotController {
     public ResponseEntity<String> postMessage(@RequestBody Request request) {
         if (request != null) {
             if (request.getType().equals("confirmation"))
-                return new ResponseEntity<>("2e2ed453", new HttpHeaders(), HttpStatus.OK);
+                return new ResponseEntity<>(code, new HttpHeaders(), HttpStatus.OK);
             String answerBot = "Вы сказали: " + request.getObject().getBody();
-            String response = createResponse(String.valueOf(request.getObject().getUser_id()), URLEncoder.encode(answerBot, StandardCharsets.UTF_8));
+            String response = createResponse(String.valueOf(request.getObject().getUser_id()),
+                    URLEncoder.encode(answerBot, StandardCharsets.UTF_8));
 
             try {
                 url = new URL(response);
@@ -45,10 +57,8 @@ public class BotController {
 
                 HttpResponse responsee = client.execute(httpGet);
 
-
                 BufferedReader br = new BufferedReader(new InputStreamReader((responsee.getEntity().getContent())));
                 String outputCode;
-
 
                 while ((outputCode = br.readLine()) != null) {
                     System.out.println(outputCode);
@@ -60,20 +70,13 @@ public class BotController {
         }
         return new ResponseEntity<>("ok", new HttpHeaders(), HttpStatus.OK);
     }
-/*
-    @GetMapping("/1")
-    public ResponseEntity<String> send(){
-        System.out.println("fsdfdsfsd");
-        return new ResponseEntity<>(String.valueOf(url), new HttpHeaders(), HttpStatus.OK);
-    }*/
-
 
 
     public String createResponse(String userId, String message){
-        String token = "f6115d0a0a2f9f1248fcca4669bff2c849803ebf58a964f82b4ff5a7d97adb4b83ddde9e6e3d98c15ba73";
-        String vkApiMethod = "https://api.vk.com/method/messages.send?access_token=" + token + "&v=5.50";
         return vkApiMethod + "&user_id=" + userId + "&message=" + message + "&random_id=" + random.nextInt(10);
     }
 
-
+    public String getCode() {
+        return code;
+    }
 }

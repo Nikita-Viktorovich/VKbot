@@ -15,6 +15,17 @@ public class Message {
 
     public Message(){}
 
+    public Message(int id, long date, int out, long user_id, int read_state, String title, String body, long[] owner_ids) {
+       setId(id);
+       setDate(date);
+       setOut(out);
+       setUser_id(user_id);
+       setRead_state(read_state);
+       setTitle(title);
+       setBody(body);
+       setOwner_ids(owner_ids);
+    }
+
     public int getId() {
         return id;
     }
