@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "vkApiMethod",
+      "type": "java.lang.String",
+      "description": "Description for vkApiMethod."
+    },
+    {
+      "name": "app.token",
+      "type": "java.lang.String",
+      "description": "Description for app.token."
+    },
+    {
+      "name": "app.code",
+      "type": "java.lang.String",
+      "description": "Description for app.code."
+    }
+  ] }
