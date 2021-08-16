@@ -55,15 +55,16 @@ public class BotController {
                 httpGet.addHeader("accept", "application/x-www-form-urlencoded");
                 httpGet.addHeader("Content-length", String.valueOf(answerBot.getBytes(StandardCharsets.UTF_8).length));
 
-                HttpResponse responsee = client.execute(httpGet);
+                HttpResponse httpResponse = client.execute(httpGet);
 
-                BufferedReader br = new BufferedReader(new InputStreamReader((responsee.getEntity().getContent())));
+                BufferedReader br = new BufferedReader(new InputStreamReader((httpResponse.getEntity().getContent())));
                 String outputCode;
 
                 while ((outputCode = br.readLine()) != null) {
                     System.out.println(outputCode);
                 }
                 br.close();
+
             } catch (IOException | UnsupportedOperationException e) {
                 e.printStackTrace();
             }
@@ -71,12 +72,8 @@ public class BotController {
         return new ResponseEntity<>("ok", new HttpHeaders(), HttpStatus.OK);
     }
 
-
     public String createResponse(String userId, String message){
         return vkApiMethod + "&user_id=" + userId + "&message=" + message + "&random_id=" + random.nextInt(10);
     }
 
-    public String getCode() {
-        return code;
-    }
 }
