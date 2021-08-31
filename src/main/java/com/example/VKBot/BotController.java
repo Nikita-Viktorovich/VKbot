@@ -33,10 +33,6 @@ public class BotController {
     @Value("${app.code}")
     private String code;
 
-    URL url;
-    HttpClient client;
-    HttpGet httpGet;
-
 
     @PostMapping("/1")
     @ResponseStatus(HttpStatus.OK)
@@ -47,10 +43,13 @@ public class BotController {
             String answerBot = "Вы сказали: " + request.getObject().getBody();
             String response = createResponse(String.valueOf(request.getObject().getUser_id()),
                     URLEncoder.encode(answerBot, StandardCharsets.UTF_8));
+            URL url;
 
             try {
                 url = new URL(response);
+                HttpClient client;
                 client = HttpClientBuilder.create().build();
+                HttpGet httpGet;
                 httpGet = new HttpGet(String.valueOf(url));
                 httpGet.addHeader("accept", "application/x-www-form-urlencoded");
                 httpGet.addHeader("Content-length", String.valueOf(answerBot.getBytes(StandardCharsets.UTF_8).length));
